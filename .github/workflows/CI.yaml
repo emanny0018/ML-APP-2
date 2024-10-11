@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r scripts/requirements.txt  # Pointing to the correct path
 
     - name: Preprocess Data
       run: |
@@ -34,7 +34,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: preprocessed-data
-        path: data/preprocessed_data.csv  # Assuming this file is saved during preprocessing
+        path: data/preprocessed_data.csv
 
     - name: Feature Engineering
       run: |
@@ -44,7 +44,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: fe-combined-data
-        path: data/fe_combined_data.csv  # Assuming this file is saved during feature engineering
+        path: data/fe_combined_data.csv
 
   model-training:
     needs: build-and-test
@@ -62,7 +62,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r scripts/requirements.txt  # Pointing to the correct path
 
     - name: Download feature-engineered data
       uses: actions/download-artifact@v3
@@ -77,7 +77,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: trained-model
-        path: data/voting_classifier.pkl  # Assuming the model is saved during training
+        path: data/voting_classifier.pkl
 
   model-evaluation:
     needs: model-training
@@ -95,7 +95,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r scripts/requirements.txt  # Pointing to the correct path
 
     - name: Download feature-engineered data
       uses: actions/download-artifact@v3
@@ -133,7 +133,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r scripts/requirements.txt  # Pointing to the correct path
 
     - name: Download feature-engineered data
       uses: actions/download-artifact@v3
