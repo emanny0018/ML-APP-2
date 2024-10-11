@@ -12,10 +12,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
@@ -31,7 +31,7 @@ jobs:
         INPUT_DATA: "data/epl_combined_data.csv"
 
     - name: Upload preprocessed data
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: preprocessed-data
         path: data/preprocessed_data.csv  # Assuming this file is saved during preprocessing
@@ -41,7 +41,7 @@ jobs:
         python scripts/feature_engineering.py
 
     - name: Upload feature-engineered data
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: fe-combined-data
         path: data/fe_combined_data.csv  # Assuming this file is saved during feature engineering
@@ -52,10 +52,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
@@ -65,7 +65,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Download feature-engineered data
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: fe-combined-data
 
@@ -74,7 +74,7 @@ jobs:
         python scripts/model_training.py
 
     - name: Upload trained model
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: trained-model
         path: data/voting_classifier.pkl  # Assuming the model is saved during training
@@ -85,10 +85,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
@@ -98,12 +98,12 @@ jobs:
         pip install -r requirements.txt
 
     - name: Download feature-engineered data
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: fe-combined-data
 
     - name: Download trained model
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: trained-model
 
@@ -112,7 +112,7 @@ jobs:
         python scripts/model_evaluation.py
 
     - name: Upload evaluation results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: evaluation-results
         path: data/evaluation_results.txt
@@ -123,10 +123,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
@@ -136,12 +136,12 @@ jobs:
         pip install -r requirements.txt
 
     - name: Download feature-engineered data
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: fe-combined-data
 
     - name: Download trained model
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: trained-model
 
@@ -153,7 +153,7 @@ jobs:
         AWAY_TEAM: "manchester city"
 
     - name: Upload prediction results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: prediction-results
         path: data/prediction_results.txt
