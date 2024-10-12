@@ -9,7 +9,6 @@ def preprocess_data(input_path, output_path):
     df = pd.read_csv(input_path)
 
     # Step 2: Drop unnecessary or incomplete columns
-    # Drop columns such as Odds_Draw, Odds_Away_Win (customize based on your needs)
     df.drop(columns=['Odds_Draw', 'Odds_Away_Win'], inplace=True, errors='ignore')
 
     # Step 3: Handle missing values (You can also customize how to handle missing data)
@@ -28,10 +27,6 @@ def preprocess_data(input_path, output_path):
     print(df.head())
 
 if __name__ == "__main__":
-    # Define paths to input and output data
-    input_file = os.getenv('INPUT_DATA', 'data/epl_combined_data.csv')  # Path to raw data
-    output_file = 'data/preprocessed_data.csv'  # Path to save preprocessed data
-
-    # Run preprocessing
+    input_file = os.getenv('INPUT_DATA', 'data/epl_combined_data.csv')
+    output_file = 'data/preprocessed_data.csv'
     preprocess_data(input_file, output_file)
-
