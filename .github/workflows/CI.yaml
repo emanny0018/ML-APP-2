@@ -31,17 +31,23 @@ jobs:
         INPUT_DATA: "data/epl_combined_data.csv"
 
     - name: Upload preprocessed data
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: preprocessed-data
         path: data/preprocessed_data.csv
+
+    - name: Download preprocessed data
+      uses: actions/download-artifact@v4
+      with:
+        name: preprocessed-data
+        path: data/
 
     - name: Feature Engineering
       run: |
         python scripts/feature_engineering.py
 
     - name: Upload feature-engineered data
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: fe-combined-data
         path: data/fe_combined_data.csv
@@ -65,16 +71,17 @@ jobs:
         pip install -r scripts/requirements.txt  # Pointing to the correct path
 
     - name: Download feature-engineered data
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: fe-combined-data
+        path: data/
 
     - name: Model Training
       run: |
         python scripts/model_training.py
 
     - name: Upload trained model
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: trained-model
         path: data/voting_classifier.pkl
@@ -98,21 +105,23 @@ jobs:
         pip install -r scripts/requirements.txt  # Pointing to the correct path
 
     - name: Download feature-engineered data
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: fe-combined-data
+        path: data/
 
     - name: Download trained model
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: trained-model
+        path: data/
 
     - name: Model Evaluation
       run: |
         python scripts/model_evaluation.py
 
     - name: Upload evaluation results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: evaluation-results
         path: data/evaluation_results.txt
@@ -136,14 +145,16 @@ jobs:
         pip install -r scripts/requirements.txt  # Pointing to the correct path
 
     - name: Download feature-engineered data
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: fe-combined-data
+        path: data/
 
     - name: Download trained model
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: trained-model
+        path: data/
 
     - name: Run Prediction
       run: |
@@ -153,7 +164,7 @@ jobs:
         AWAY_TEAM: "manchester city"
 
     - name: Upload prediction results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: prediction-results
         path: data/prediction_results.txt
