@@ -42,6 +42,7 @@ def apply_feature_engineering(input_path, output_path):
     # Step 1: Load the preprocessed data
     print(f"Loading preprocessed data from {input_path}...")
     df = pd.read_csv(input_path)
+    print(f"Columns in the dataset: {df.columns.tolist()}")
     
     # Step 2: Check if the necessary columns are present
     print("Applying feature engineering...")
@@ -60,7 +61,8 @@ def apply_feature_engineering(input_path, output_path):
 if __name__ == "__main__":
     # Define input and output paths
     input_file = os.getenv('INPUT_DATA', 'data/preprocessed_data.csv')  # Preprocessed data file path
-    output_file = 'data/fe_combined_matches.csv'  # Output file for feature-engineered data
+    output_file = os.getenv('OUTPUT_DATA', 'data/fe_combined_matches.csv')  # Output file for feature-engineered data
 
     # Apply feature engineering
     apply_feature_engineering(input_file, output_file)
+    print(f"Feature engineering completed. Saved to {output_file}.")
