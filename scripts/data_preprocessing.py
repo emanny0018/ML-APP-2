@@ -1,5 +1,5 @@
-import pandas as pd
 import os
+import pandas as pd
 
 def preprocess_data(input_path, output_path):
     """Load the raw data, clean it, handle missing values, and save the preprocessed data."""
@@ -8,10 +8,14 @@ def preprocess_data(input_path, output_path):
     print(f"Loading raw data from {input_path}...")
     df = pd.read_csv(input_path)
 
-    # Step 2: Drop unnecessary or incomplete columns
-    df.drop(columns=['Odds_Draw', 'Odds_Away_Win'], inplace=True, errors='ignore')
+    # Step 2: Check if the required columns exist
+    required_columns = ['Home', 'Away', 'Date', 'HomeGoals', 'AwayGoals', 'Target']
+    
+    missing_columns = [col for col in required_columns if col not in df.columns]
+    if missing_columns:
+        raise KeyError(f"Missing required columns: {missing_columns}")
 
-    # Step 3: Handle missing values (You can also customize how to handle missing data)
+    # Step 3: Handle missing values
     df.fillna(0, inplace=True)
 
     # Step 4: Convert 'Date' column to datetime format
@@ -27,6 +31,9 @@ def preprocess_data(input_path, output_path):
     print(df.head())
 
 if __name__ == "__main__":
-    input_file = os.getenv('INPUT_DATA', 'data/epl_combined_data.csv')
-    output_file = 'data/preprocessed_data.csv'
+    input_file = os.getenv('INPUT_DATA', 'data/epl_combined_data.csv')  # Path to raw data
+    output_file = 'data/preprocessed_data.csv'  # Path to save preprocessed data
+
+    # Run preprocessing
     preprocess_data(input_file, output_file)
+    print(f"Preprocessing completed. Saved to {output_file}.")
