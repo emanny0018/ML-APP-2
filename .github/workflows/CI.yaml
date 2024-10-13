@@ -41,6 +41,11 @@ jobs:
       with:
         name: preprocessed-data
         path: data/
+        
+    - name: Validate Preprocessed Data
+      run: |
+       cat data/preprocessed_data.csv
+       head -n 20 data/preprocessed_data.csv
 
     - name: Feature Engineering
       run: |
