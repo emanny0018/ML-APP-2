@@ -41,8 +41,12 @@ def apply_feature_engineering(input_path, output_path):
     
     # Step 1: Load the preprocessed data
     print(f"Loading preprocessed data from {input_path}...")
+<<<<<<< HEAD
     df = pd.read_csv(input_path)
     print(f"Columns in the dataset: {df.columns.tolist()}")
+=======
+    df = pd.read_csv(input_path, low_memory=False)
+>>>>>>> 5bb6ce4 (updated scripts)
     
     # Step 2: Check if the necessary columns are present
     print("Applying feature engineering...")
@@ -66,3 +70,7 @@ if __name__ == "__main__":
     # Apply feature engineering
     apply_feature_engineering(input_file, output_file)
     print(f"Feature engineering completed. Saved to {output_file}.")
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5bb6ce4 (updated scripts)
