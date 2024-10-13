@@ -3,7 +3,7 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - prod
+      - main
   workflow_dispatch:
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r scripts/requirements.txt  # Pointing to the correct path
+        pip install -r scripts/requirements.txt
 
     - name: Preprocess Data
       run: |
@@ -36,26 +36,18 @@ jobs:
         name: preprocessed-data
         path: data/preprocessed_data.csv
 
-    - name: Download preprocessed data
-      uses: actions/download-artifact@v4
-      with:
-        name: preprocessed-data
-        path: data/
-        
-    - name: Validate Preprocessed Data
-      run: |
-       cat data/preprocessed_data.csv
-       head -n 20 data/preprocessed_data.csv
-
     - name: Feature Engineering
       run: |
         python scripts/feature_engineering.py
+      env:
+        INPUT_DATA: "data/preprocessed_data.csv"
+        OUTPUT_DATA: "data/fe_combined_matches.csv"
 
     - name: Upload feature-engineered data
       uses: actions/upload-artifact@v4
       with:
         name: fe-combined-data
-        path: data/fe_combined_data.csv
+        path: data/fe_combined_matches.csv
 
   model-training:
     needs: build-and-test
@@ -73,13 +65,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r scripts/requirements.txt  # Pointing to the correct path
+        pip install -r scripts/requirements.txt
 
     - name: Download feature-engineered data
       uses: actions/download-artifact@v4
       with:
         name: fe-combined-data
-        path: data/
 
     - name: Model Training
       run: |
@@ -90,86 +81,3 @@ jobs:
       with:
         name: trained-model
         path: data/voting_classifier.pkl
-
-  model-evaluation:
-    needs: model-training
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r scripts/requirements.txt  # Pointing to the correct path
-
-    - name: Download feature-engineered data
-      uses: actions/download-artifact@v4
-      with:
-        name: fe-combined-data
-        path: data/
-
-    - name: Download trained model
-      uses: actions/download-artifact@v4
-      with:
-        name: trained-model
-        path: data/
-
-    - name: Model Evaluation
-      run: |
-        python scripts/model_evaluation.py
-
-    - name: Upload evaluation results
-      uses: actions/upload-artifact@v4
-      with:
-        name: evaluation-results
-        path: data/evaluation_results.txt
-
-  prediction:
-    needs: model-evaluation
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r scripts/requirements.txt  # Pointing to the correct path
-
-    - name: Download feature-engineered data
-      uses: actions/download-artifact@v4
-      with:
-        name: fe-combined-data
-        path: data/
-
-    - name: Download trained model
-      uses: actions/download-artifact@v4
-      with:
-        name: trained-model
-        path: data/
-
-    - name: Run Prediction
-      run: |
-        python scripts/match_prediction.py
-      env:
-        HOME_TEAM: "liverpool"
-        AWAY_TEAM: "manchester city"
-
-    - name: Upload prediction results
-      uses: actions/upload-artifact@v4
-      with:
-        name: prediction-results
-        path: data/prediction_results.txt
