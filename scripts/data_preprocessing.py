@@ -9,19 +9,18 @@ def preprocess_data(input_path, output_path):
     df = pd.read_csv(input_path, low_memory=False)  # Added low_memory=False to handle mixed types warning
 
     # Step 2: Check for required columns
-    required_columns = ['Team', 'MP', 'W', 'D', 'L', 'GF', 'GA', 'GD', 'Pts', 'Home', 'Away', 'Date', 'HomeGoals', 'AwayGoals', 'Target']
+    required_columns = ['Home', 'Away', 'Date', 'HomeGoals', 'AwayGoals', 'Target']
+    print(f"Columns in dataset: {list(df.columns)}")  # Print all available columns in the dataset
     missing_columns = [col for col in required_columns if col not in df.columns]
     
     if missing_columns:
         raise KeyError(f"Missing required columns: {missing_columns}")
 
     # Step 3: Drop unnecessary or incomplete columns (if needed)
-    # Example of dropping 'Odds_Draw', 'Odds_Away_Win' if they are not needed
     unnecessary_columns = ['Odds_Draw', 'Odds_Away_Win']
     df.drop(columns=[col for col in unnecessary_columns if col in df.columns], inplace=True, errors='ignore')
 
     # Step 4: Handle missing values (You can customize how to handle missing data)
-    # Filling missing numeric data with 0, but this can be changed as needed.
     df.fillna(0, inplace=True)
 
     # Step 5: Convert 'Date' column to datetime format
